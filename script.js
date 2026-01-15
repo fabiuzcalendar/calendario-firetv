@@ -33,9 +33,9 @@ const fixedHolidays = [
 
 // COMPLEANNI
 const birthdays = {
-  "02-08": "Comple Katiuscia",
+  "02-08": "Comple K",
   "07-05": "Comple Marco",
-  "01-02": "Comple Katiuscia"
+  "01-02": "Comple K"
 };
 
 function renderCalendar(containerId, titleId, year, month, showBirthdays) {
@@ -149,3 +149,4 @@ function goFullscreen() {
 // Fire TV: serve una interazione
 document.addEventListener("keydown", goFullscreen, { once: true });
 document.addEventListener("click", goFullscreen, { once: true });
+

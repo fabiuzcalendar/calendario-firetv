@@ -1,0 +1,151 @@
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth();
+
+const monthNames = [
+  "GENNAIO", "FEBBRAIO", "MARZO", "APRILE", "MAGGIO", "GIUGNO",
+  "LUGLIO", "AGOSTO", "SETTEMBRE", "OTTOBRE", "NOVEMBRE", "DICEMBRE"
+];
+
+const dayNames = ["D", "L", "M", "M", "G", "V", "S"];
+
+// FESTIVITÀ OLANDESI
+const holidays = [
+  "2026-01-01","2026-04-03","2026-04-05","2026-04-06",
+  "2026-04-27","2026-05-05","2026-05-14",
+  "2026-05-24","2026-05-25",
+  "2026-12-25","2026-12-26"
+];
+
+// FESTIVITÀ ITALIANE
+const italianHolidays = [
+  "2026-01-01","2026-01-06","2026-04-05","2026-04-06",
+  "2026-04-25","2026-05-01","2026-06-02",
+  "2026-08-15","2026-11-01","2026-12-08",
+  "2026-12-25","2026-12-26"
+];
+
+// FESTIVITÀ FISSE
+const fixedHolidays = [
+  "01-01","01-06","04-25","05-01","06-02",
+  "08-15","11-01","12-08","12-25","12-26"
+];
+
+// COMPLEANNI
+const birthdays = {
+  "02-08": "Comple Katiuscia",
+  "07-05": "Comple Marco",
+  "01-02": "Comple Katiuscia"
+};
+
+function renderCalendar(containerId, titleId, year, month, showBirthdays) {
+  const container = document.getElementById(containerId);
+  const title = document.getElementById(titleId);
+
+  container.innerHTML = "";
+
+  const leftCol = document.createElement("div");
+  const rightCol = document.createElement("div");
+
+  leftCol.className = "month-half";
+  rightCol.className = "month-half";
+
+  container.appendChild(leftCol);
+  container.appendChild(rightCol);
+
+  const ref = new Date(year, month, 1);
+  const y = ref.getFullYear();
+  const m = ref.getMonth();
+
+  title.textContent = monthNames[m] + " " + y;
+
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(y, m, d);
+    const dayDiv = document.createElement("div");
+    dayDiv.className = "day";
+
+    const iso = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const md = `${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+	const todayIso =
+  today.getFullYear() + "-" +
+  String(today.getMonth() + 1).padStart(2, "0") + "-" +
+  String(today.getDate()).padStart(2, "0");
+
+if (iso === todayIso && containerId === "days") {
+  dayDiv.classList.add("today");
+}
+
+
+    if (
+      date.getDay() === 0 ||
+      holidays.includes(iso) ||
+      italianHolidays.includes(iso) ||
+      fixedHolidays.includes(md)
+    ) {
+      dayDiv.classList.add("sunday");
+    }
+
+    let birthdayText = "";
+    if (showBirthdays && birthdays[md]) {
+      birthdayText = `<div class="birthday">${birthdays[md]}</div>`;
+    }
+
+    dayDiv.innerHTML = `
+      <div class="day-number">${d}</div>
+      <div class="day-name">${dayNames[date.getDay()]}</div>
+      ${birthdayText}
+    `;
+
+    if (d <= 15) {
+      leftCol.appendChild(dayDiv);
+    } else {
+      rightCol.appendChild(dayDiv);
+    }
+  }
+}
+
+// ⬅️ mese precedente (NO compleanni)
+renderCalendar("prev-days", "prev-month", year, month - 1, false);
+
+// ✅ mese attuale (CON compleanni)
+renderCalendar("days", "current-month", year, month, true);
+
+// ➡️ mese successivo (NO compleanni)
+renderCalendar("next-days", "next-month", year, month + 1, false);
+function scheduleMidnightReload() {
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+
+  const msToMidnight = midnight - now;
+
+  setTimeout(() => {
+    location.reload();
+  }, msToMidnight);
+}
+
+scheduleMidnightReload();
+function applyNightMode() {
+  const hour = new Date().getHours();
+
+  if (hour >= 21 || hour < 7) {
+    document.body.classList.add("night");
+  }
+}
+
+applyNightMode();
+function goFullscreen() {
+  const el = document.documentElement;
+
+  if (el.requestFullscreen) {
+    el.requestFullscreen();
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen();
+  }
+}
+
+// Fire TV: serve una interazione
+document.addEventListener("keydown", goFullscreen, { once: true });
+document.addEventListener("click", goFullscreen, { once: true });

@@ -145,5 +145,25 @@ function goFullscreen() {
 document.addEventListener("keydown", goFullscreen, { once: true });
 document.addEventListener("click", goFullscreen, { once: true });
 
+/***********************
+ * MOBILE: APERTURA MESE
+ ***********************/
+function openMonth(type) {
+  if (window.innerWidth > 900) return;
+
+  const calendar = document.getElementById("calendar");
+  calendar.classList.remove("mobile-overview");
+  calendar.classList.add("mobile-focus", type);
+
+  document.getElementById("back-button").style.display = "block";
+}
+
+function closeMonth() {
+  const calendar = document.getElementById("calendar");
+  calendar.className = "mobile-overview";
+
+  document.getElementById("back-button").style.display = "none";
+}
+
 
 

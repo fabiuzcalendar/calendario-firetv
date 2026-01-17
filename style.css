@@ -277,4 +277,35 @@ body.night #notes-area {
     font-size: 16px;
   }
 }
+/* =====================
+   SCORRIMENTO ORIZZONTALE MOBILE
+===================== */
+@media (max-width: 900px) {
+
+  html, body {
+    overflow-x: hidden;
+  }
+
+  #calendar {
+    display: flex;
+    flex-direction: row;
+    width: 300vw;          /* 3 schermate */
+    height: 100vh;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .side-month,
+  .main-month {
+    width: 100vw;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  /* mostra anche i mesi laterali su mobile */
+  .side-month {
+    display: block;
+  }
+}
+
 

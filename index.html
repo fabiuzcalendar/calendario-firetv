@@ -3,40 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendario di Fabio</title>
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div id="calendar">
+<div id="calendar" class="mobile-overview">
 
-    <!-- MESE PRECEDENTE -->
-    <div class="side-month">
-      <div class="month-header" id="prev-month"></div>
-      <div class="days" id="prev-days"></div>
-    </div>
-
-    <!-- MESE CORRENTE -->
-    <div class="main-month">
-      <div class="month-header" id="current-month"></div>
-      <div class="days" id="days"></div>
-    </div>
-
-    <!-- MESE SUCCESSIVO -->
-    <div class="side-month">
-      <div class="month-header" id="next-month"></div>
-      <div class="days" id="next-days"></div>
-    </div>
-
+  <div class="side-month" onclick="openMonth('prev')">
+    <div class="month-header" id="prev-month"></div>
+    <div class="days" id="prev-days"></div>
   </div>
 
-  <script src="script.js"></script>
+  <div class="main-month" onclick="openMonth('current')">
+    <div class="month-header" id="current-month"></div>
+    <div class="days" id="days"></div>
+  </div>
+
+  <div class="side-month" onclick="openMonth('next')">
+    <div class="month-header" id="next-month"></div>
+    <div class="days" id="next-days"></div>
+  </div>
+
+</div>
+
+<button id="back-button" onclick="closeMonth()">⬅ Torna ai mesi</button>
+
+<script src="script.js"></script>
 </body>
 </html>
+
 
 
 

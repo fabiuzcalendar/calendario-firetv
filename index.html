@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendario di Fabio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div id="calendar">
 
+  <!-- MESE PRECEDENTE -->
   <div class="side-month">
     <div class="month-header" id="prev-month"></div>
     <div class="days" id="prev-days"></div>
   </div>
 
+  <!-- MESE CORRENTE -->
   <div class="main-month">
     <div class="month-header" id="current-month"></div>
     <div class="days" id="days"></div>
   </div>
 
+  <!-- MESE SUCCESSIVO -->
   <div class="side-month">
     <div class="month-header" id="next-month"></div>
     <div class="days" id="next-days"></div>
@@ -26,7 +32,30 @@
 
 </div>
 
+<!-- 🔐 PANNELLO PASSWORD + NOTE -->
+<div id="notes-panel">
+
+  <input
+    type="password"
+    id="notes-password"
+    placeholder="Password"
+    autocomplete="off"
+  >
+
+  <input
+    type="text"
+    id="notes-input"
+    placeholder="Scrivi una nota (es. appuntamento, promemoria)"
+  >
+
+  <button id="save-note">Salva nota</button>
+
+</div>
+
+<!-- 📝 NOTA VISUALIZZATA -->
+<div id="notes-display"></div>
 
 <script src="script.js"></script>
 </body>
 </html>
+

@@ -64,18 +64,18 @@ function renderCalendar(containerId, titleId, year, month, showBirthdays) {
 
   const daysInMonth = new Date(y, m + 1, 0).getDate();
 
+  const todayIso =
+    today.getFullYear() + "-" +
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
+
   for (let d = 1; d <= daysInMonth; d++) {
     const date = new Date(y, m, d);
     const dayDiv = document.createElement("div");
     dayDiv.className = "day";
 
     const iso = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-    const md = `${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-
-    const todayIso =
-      today.getFullYear() + "-" +
-      String(today.getMonth() + 1).padStart(2, "0") + "-" +
-      String(today.getDate()).padStart(2, "0");
+    const md  = `${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 
     if (iso === todayIso && containerId === "days") {
       dayDiv.classList.add("today");
@@ -101,15 +101,11 @@ function renderCalendar(containerId, titleId, year, month, showBirthdays) {
       ${birthdayText}
     `;
 
-    if (d <= 15) {
-      leftCol.appendChild(dayDiv);
-    } else {
-      rightCol.appendChild(dayDiv);
-    }
+    (d <= 15 ? leftCol : rightCol).appendChild(dayDiv);
   }
 }
 
-// mesi
+// Mesi
 renderCalendar("prev-days", "prev-month", year, month - 1, false);
 renderCalendar("days", "current-month", year, month, true);
 renderCalendar("next-days", "next-month", year, month + 1, false);
@@ -121,7 +117,6 @@ function scheduleMidnightReload() {
   const now = new Date();
   const midnight = new Date();
   midnight.setHours(24, 0, 0, 0);
-
   setTimeout(() => location.reload(), midnight - now);
 }
 scheduleMidnightReload();
@@ -149,49 +144,6 @@ function goFullscreen() {
 document.addEventListener("keydown", goFullscreen, { once: true });
 document.addEventListener("click", goFullscreen, { once: true });
 
-/***********************
- * 🔐 PASSWORD + NOTE
- ***********************/
-const PASSWORD = "el91463";
 
-const passwordInput = document.getElementById("notes-password");
-const notesInput = document.getElementById("notes-input");
-const saveButton = document.getElementById("save-note");
-const notesDisplay = document.getElementById("notes-display");
-
-// carica nota salvata
-const savedNote = localStorage.getItem("calendarNote");
-if (savedNote) {
-  notesDisplay.textContent = savedNote;
-}
-
-// salva nota con password
-saveButton.addEventListener("click", () => {
-  if (passwordInput.value !== PASSWORD) {
-    alert("Password errata");
-    return;
-  }
-
-  const text = notesInput.value.trim();
-  if (!text) return;
-
-  localStorage.setItem("calendarNote", text);
-  notesDisplay.textContent = text;
-  notesInput.value = "";
-});
-const PASSWORD = "el91463";
-
-function unlockNotes() {
-  const pass = document.getElementById("password").value;
-  const notes = document.getElementById("notes");
-
-  if (pass === PASSWORD) {
-    notes.disabled = false;
-    notes.focus();
-    alert("Note sbloccate");
-  } else {
-    alert("Password errata");
-  }
-}
 
 

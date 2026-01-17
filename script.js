@@ -1,3 +1,6 @@
+/***********************
+ * CALENDARIO
+ ***********************/
 const today = new Date();
 const year = today.getFullYear();
 const month = today.getMonth();
@@ -68,15 +71,15 @@ function renderCalendar(containerId, titleId, year, month, showBirthdays) {
 
     const iso = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
     const md = `${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-	const todayIso =
-  today.getFullYear() + "-" +
-  String(today.getMonth() + 1).padStart(2, "0") + "-" +
-  String(today.getDate()).padStart(2, "0");
 
-if (iso === todayIso && containerId === "days") {
-  dayDiv.classList.add("today");
-}
+    const todayIso =
+      today.getFullYear() + "-" +
+      String(today.getMonth() + 1).padStart(2, "0") + "-" +
+      String(today.getDate()).padStart(2, "0");
 
+    if (iso === todayIso && containerId === "days") {
+      dayDiv.classList.add("today");
+    }
 
     if (
       date.getDay() === 0 ||
@@ -106,47 +109,74 @@ if (iso === todayIso && containerId === "days") {
   }
 }
 
-// ⬅️ mese precedente (NO compleanni)
+// mesi
 renderCalendar("prev-days", "prev-month", year, month - 1, false);
-
-// ✅ mese attuale (CON compleanni)
 renderCalendar("days", "current-month", year, month, true);
-
-// ➡️ mese successivo (NO compleanni)
 renderCalendar("next-days", "next-month", year, month + 1, false);
+
+/***********************
+ * REFRESH A MEZZANOTTE
+ ***********************/
 function scheduleMidnightReload() {
   const now = new Date();
   const midnight = new Date();
   midnight.setHours(24, 0, 0, 0);
 
-  const msToMidnight = midnight - now;
-
-  setTimeout(() => {
-    location.reload();
-  }, msToMidnight);
+  setTimeout(() => location.reload(), midnight - now);
 }
-
 scheduleMidnightReload();
+
+/***********************
+ * MODALITÀ NOTTE
+ ***********************/
 function applyNightMode() {
   const hour = new Date().getHours();
-
   if (hour >= 21 || hour < 7) {
     document.body.classList.add("night");
   }
 }
-
 applyNightMode();
+
+/***********************
+ * FULLSCREEN FIRE TV
+ ***********************/
 function goFullscreen() {
   const el = document.documentElement;
-
-  if (el.requestFullscreen) {
-    el.requestFullscreen();
-  } else if (el.webkitRequestFullscreen) {
-    el.webkitRequestFullscreen();
-  }
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 }
 
-// Fire TV: serve una interazione
 document.addEventListener("keydown", goFullscreen, { once: true });
 document.addEventListener("click", goFullscreen, { once: true });
+
+/***********************
+ * 🔐 PASSWORD + NOTE
+ ***********************/
+const PASSWORD = "el91463";
+
+const passwordInput = document.getElementById("notes-password");
+const notesInput = document.getElementById("notes-input");
+const saveButton = document.getElementById("save-note");
+const notesDisplay = document.getElementById("notes-display");
+
+// carica nota salvata
+const savedNote = localStorage.getItem("calendarNote");
+if (savedNote) {
+  notesDisplay.textContent = savedNote;
+}
+
+// salva nota con password
+saveButton.addEventListener("click", () => {
+  if (passwordInput.value !== PASSWORD) {
+    alert("Password errata");
+    return;
+  }
+
+  const text = notesInput.value.trim();
+  if (!text) return;
+
+  localStorage.setItem("calendarNote", text);
+  notesDisplay.textContent = text;
+  notesInput.value = "";
+});
 

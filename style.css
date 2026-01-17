@@ -307,5 +307,37 @@ body.night #notes-area {
     display: block;
   }
 }
+/* =====================
+   NOTE PROTETTE
+===================== */
+#notes-panel {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.95);
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 999;
+}
+
+#notes-panel input,
+#notes-panel textarea {
+  font-size: 14px;
+  padding: 6px;
+}
+
+#notes-panel textarea {
+  width: 200px;
+  height: 60px;
+  resize: none;
+}
+
+body.night #notes-panel {
+  background: rgba(30,30,30,0.95);
+}
+
 
 

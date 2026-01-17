@@ -12,7 +12,7 @@ const monthNames = [
 
 const dayNames = ["D", "L", "M", "M", "G", "V", "S"];
 
-// FESTIVITÀ OLANDESI
+// FESTIVITÀ
 const holidays = [
   "2026-01-01","2026-04-03","2026-04-05","2026-04-06",
   "2026-04-27","2026-05-05","2026-05-14",
@@ -20,7 +20,6 @@ const holidays = [
   "2026-12-25","2026-12-26"
 ];
 
-// FESTIVITÀ ITALIANE
 const italianHolidays = [
   "2026-01-01","2026-01-06","2026-04-05","2026-04-06",
   "2026-04-25","2026-05-01","2026-06-02",
@@ -28,11 +27,15 @@ const italianHolidays = [
   "2026-12-25","2026-12-26"
 ];
 
-// FESTIVITÀ FISSE
 const fixedHolidays = [
   "01-01","01-06","04-25","05-01","06-02",
   "08-15","11-01","12-08","12-25","12-26"
 ];
+
+// Set per performance
+const holidaysSet = new Set(holidays);
+const italianHolidaysSet = new Set(italianHolidays);
+const fixedHolidaysSet = new Set(fixedHolidays);
 
 // COMPLEANNI
 const birthdays = {
@@ -49,18 +52,16 @@ function renderCalendar(containerId, titleId, year, month, showBirthdays) {
 
   const leftCol = document.createElement("div");
   const rightCol = document.createElement("div");
-
   leftCol.className = "month-half";
   rightCol.className = "month-half";
 
-  container.appendChild(leftCol);
-  container.appendChild(rightCol);
+  container.append(leftCol, rightCol);
 
   const ref = new Date(year, month, 1);
   const y = ref.getFullYear();
   const m = ref.getMonth();
 
-  title.textContent = monthNames[m] + " " + y;
+  title.textContent = `${monthNames[m]} ${y}`;
 
   const daysInMonth = new Date(y, m + 1, 0).getDate();
 
@@ -83,9 +84,9 @@ function renderCalendar(containerId, titleId, year, month, showBirthdays) {
 
     if (
       date.getDay() === 0 ||
-      holidays.includes(iso) ||
-      italianHolidays.includes(iso) ||
-      fixedHolidays.includes(md)
+      holidaysSet.has(iso) ||
+      italianHolidaysSet.has(iso) ||
+      fixedHolidaysSet.has(md)
     ) {
       dayDiv.classList.add("sunday");
     }
@@ -105,7 +106,7 @@ function renderCalendar(containerId, titleId, year, month, showBirthdays) {
   }
 }
 
-// Mesi
+// Render mesi
 renderCalendar("prev-days", "prev-month", year, month - 1, false);
 renderCalendar("days", "current-month", year, month, true);
 renderCalendar("next-days", "next-month", year, month + 1, false);
@@ -113,37 +114,36 @@ renderCalendar("next-days", "next-month", year, month + 1, false);
 /***********************
  * REFRESH A MEZZANOTTE
  ***********************/
-function scheduleMidnightReload() {
+(function scheduleMidnightReload() {
   const now = new Date();
   const midnight = new Date();
   midnight.setHours(24, 0, 0, 0);
   setTimeout(() => location.reload(), midnight - now);
-}
-scheduleMidnightReload();
+})();
 
 /***********************
  * MODALITÀ NOTTE
  ***********************/
-function applyNightMode() {
+(function applyNightMode() {
   const hour = new Date().getHours();
   if (hour >= 21 || hour < 7) {
     document.body.classList.add("night");
   }
-}
-applyNightMode();
+})();
 
 /***********************
  * FULLSCREEN FIRE TV
  ***********************/
 function goFullscreen() {
-  const el = document.documentElement;
-  if (el.requestFullscreen) el.requestFullscreen();
-  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  if (window.innerWidth > 900) {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  }
 }
 
 document.addEventListener("keydown", goFullscreen, { once: true });
 document.addEventListener("click", goFullscreen, { once: true });
-
 
 
 

@@ -5,10 +5,13 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
-  background: #ffffff;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
   color: #111;
 }
 
@@ -19,13 +22,6 @@ body {
   display: grid;
   grid-template-columns: 18% 64% 18%;
   height: 100vh;
-}
-
-/* fullscreen TV */
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 }
 
 /* =====================
@@ -167,43 +163,6 @@ html, body {
 }
 
 /* =====================
-   AREA NOTE + PASSWORD
-===================== */
-#notes-area {
-  border-top: 2px solid #c40000;
-  padding: 12px 20px;
-  background: #fafafa;
-}
-
-#notes-area h3 {
-  margin: 0 0 6px;
-  font-size: 18px;
-}
-
-#notes-area input,
-#notes-area textarea {
-  width: 100%;
-  margin-bottom: 6px;
-  padding: 6px;
-  font-size: 16px;
-}
-
-#notes-area button {
-  padding: 8px 16px;
-  font-size: 16px;
-  background: #c40000;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-#notes-display {
-  margin-top: 8px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* =====================
    MODALITÀ NOTTE
 ===================== */
 body.night {
@@ -236,22 +195,30 @@ body.night .today {
   background: rgba(255, 100, 100, 0.18);
 }
 
-body.night #notes-area {
-  background: #1a1a1a;
-}
-
 /* =====================
-   MOBILE
+   MOBILE – SCORRIMENTO ORIZZONTALE
 ===================== */
 @media (max-width: 900px) {
 
-  #calendar {
-    grid-template-columns: 1fr;
-    height: auto;
+  html, body {
+    overflow-x: hidden;
+    height: 100%;
   }
 
-  .side-month {
-    display: none;
+  #calendar {
+    display: flex;
+    flex-direction: row;
+    width: 300vw;              /* 3 schermate */
+    height: 100vh;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .side-month,
+  .main-month {
+    width: 100vw;
+    flex-shrink: 0;
+    scroll-snap-align: start;
   }
 
   .month-header {
@@ -277,68 +244,6 @@ body.night #notes-area {
     font-size: 16px;
   }
 }
-/* =====================
-   SCORRIMENTO ORIZZONTALE MOBILE
-===================== */
-@media (max-width: 900px) {
-
-  html, body {
-    overflow-x: hidden;
-  }
-
-  #calendar {
-    display: flex;
-    flex-direction: row;
-    width: 300vw;          /* 3 schermate */
-    height: 100vh;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-  }
-
-  .side-month,
-  .main-month {
-    width: 100vw;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-
-  /* mostra anche i mesi laterali su mobile */
-  .side-month {
-    display: block;
-  }
-}
-/* =====================
-   NOTE PROTETTE
-===================== */
-#notes-panel {
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255,255,255,0.95);
-  padding: 10px;
-  border-radius: 10px;
-  display: flex;
-  gap: 6px;
-  z-index: 999;
-}
-
-#notes-panel input,
-#notes-panel textarea {
-  font-size: 14px;
-  padding: 6px;
-}
-
-#notes-panel textarea {
-  width: 200px;
-  height: 60px;
-  resize: none;
-}
-
-body.night #notes-panel {
-  background: rgba(30,30,30,0.95);
-}
-
 
 
 

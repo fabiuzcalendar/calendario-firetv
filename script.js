@@ -179,4 +179,19 @@ saveButton.addEventListener("click", () => {
   notesDisplay.textContent = text;
   notesInput.value = "";
 });
+const PASSWORD = "el91463";
+
+function unlockNotes() {
+  const pass = document.getElementById("password").value;
+  const notes = document.getElementById("notes");
+
+  if (pass === PASSWORD) {
+    notes.disabled = false;
+    notes.focus();
+    alert("Note sbloccate");
+  } else {
+    alert("Password errata");
+  }
+}
+
 

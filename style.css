@@ -244,6 +244,64 @@ body.night .today {
     font-size: 16px;
   }
 }
+/* =====================
+   MOBILE – MESI AFFIANCATI
+===================== */
+@media (max-width: 900px) {
+
+  #calendar.mobile-overview {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    height: 100vh;
+  }
+
+  .side-month,
+  .main-month {
+    min-width: 90vw;
+    flex-shrink: 0;
+    border: none;
+  }
+
+  /* vista compatta */
+  .mobile-overview .days {
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  /* focus su un solo mese */
+  #calendar.mobile-focus {
+    display: block;
+  }
+
+  #calendar.mobile-focus .side-month,
+  #calendar.mobile-focus .main-month {
+    display: none;
+  }
+
+  #calendar.mobile-focus.prev .side-month:first-child,
+  #calendar.mobile-focus.current .main-month,
+  #calendar.mobile-focus.next .side-month:last-child {
+    display: block;
+    width: 100%;
+  }
+
+  /* pulsante torna */
+  #back-button {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
+    padding: 10px 14px;
+    font-size: 16px;
+    background: #c40000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+  }
+}
+
 
 
 

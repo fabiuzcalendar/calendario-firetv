@@ -1,6 +1,4 @@
-/********************************
- RESET BASE
-*********************************/
+/************* BASE *************/
 * {
   box-sizing: border-box;
 }
@@ -8,161 +6,154 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #fafafa;
-  color: #222;
+  background: #f4f4f4;
+  color: #111;
 }
 
-/********************************
- CALENDARIO GENERALE
-*********************************/
+/************* CONTENITORE *************/
 #calendar {
-  display: flex;
-  gap: 12px;
-  padding: 12px;
-}
-
-/********************************
- BLOCCHI MESE
-*********************************/
-.side-month,
-.main-month {
-  flex: 1;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.main-month {
-  border: 2px solid #999;
-}
-
-/********************************
- HEADER MESE
-*********************************/
-.month-header {
-  text-align: center;
-  font-weight: bold;
-  padding: 8px;
-  background: #f0f0f0;
-  letter-spacing: 1px;
-}
-
-/********************************
- GRIGLIA GIORNI
-*********************************/
-.days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 15% 70% 15%;
+  height: 100vh;
+  background: #eaeaea;
 }
 
-/********************************
- GIORNO
-*********************************/
-.day {
-  min-height: 60px;
-  border: 1px solid #eee;
-  padding: 4px;
-  text-align: center;
+/************* MESI LATERALI *************/
+.side-month {
+  background: #f2f2f2;
+  padding: 10px;
   font-size: 13px;
 }
 
-.day-number {
+.side-month .month-header {
   font-weight: bold;
-  font-size: 15px;
+  text-align: center;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.side-month .day {
+  display: flex;
+  gap: 6px;
+  padding: 3px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.side-month .day-number {
+  width: 20px;
+  text-align: right;
+  font-weight: bold;
+}
+
+.side-month .day-name {
+  width: 24px;
+}
+
+/************* MESE CENTRALE *************/
+.main-month {
+  background: #ffffff;
+  border-left: 4px solid #c40000;
+  border-right: 4px solid #c40000;
+  display: flex;
+  flex-direction: column;
+}
+
+/************* HEADER *************/
+.main-month .month-header {
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  color: #c40000;
+  padding: 14px 0;
+  border-bottom: 2px solid #c40000;
+}
+
+/************* GIORNI *************/
+.days {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px 20px;
+  gap: 10px;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #ddd;
+  padding: 6px 0;
+  min-height: 44px;
+}
+
+.day-number {
+  font-size: 34px;
+  font-weight: bold;
+  width: 46px;
+  text-align: right;
 }
 
 .day-name {
-  font-size: 11px;
-  color: #777;
+  font-weight: bold;
+  width: 30px;
 }
 
-/********************************
- STATI SPECIALI
-*********************************/
-.today {
-  background: #ffe082;
-}
-
+/************* STATI *************/
 .sunday {
-  color: #c62828;
+  color: #c40000;
+}
+
+.today {
+  background: rgba(196,0,0,0.12);
+  border-left: 6px solid #c40000;
+  padding-left: 6px;
 }
 
 .birthday {
-  font-size: 10px;
-  margin-top: 2px;
-  color: #1565c0;
+  font-size: 16px;
+  font-style: italic;
+  color: #444;
 }
 
-/********************************
- BOTTONE INDIETRO (MOBILE)
-*********************************/
-#back-button {
-  display: none;
-  margin: 10px;
-  padding: 6px 12px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  background: #1976d2;
-  color: white;
-  cursor: pointer;
+/************* NOTTE *************/
+body.night {
+  background: #111;
+  color: #e0e0e0;
 }
 
-/********************************
- MOBILE
-*********************************/
+body.night .main-month {
+  background: #1a1a1a;
+  border-color: #660000;
+}
+
+body.night .month-header {
+  color: #ff6b6b;
+  border-color: #660000;
+}
+
+body.night .side-month {
+  background: #1e1e1e;
+}
+
+body.night .day {
+  border-color: #333;
+}
+
+/************* MOBILE *************/
 @media (max-width: 900px) {
 
-  #calendar.mobile-overview {
-    display: flex;
-  }
-
-  /* modalità focus */
-  #calendar.mobile-focus {
-    display: block;
-  }
-
-  /* NASCONDE I MESI NON SELEZIONATI */
-  #calendar.mobile-focus.prev .main-month,
-  #calendar.mobile-focus.prev .side-month:last-child {
-    display: none;
-  }
-
-  #calendar.mobile-focus.current .side-month {
-    display: none;
-  }
-
-  #calendar.mobile-focus.next .main-month,
-  #calendar.mobile-focus.next .side-month:first-child {
-    display: none;
-  }
-
-  #back-button {
-    display: block;
-  }
-}
-
-/********************************
- PC / DESKTOP
-*********************************/
-@media (min-width: 901px) {
-
   #calendar {
-    max-width: 1400px;
-    margin: auto;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
   }
 
   .side-month,
   .main-month {
-    cursor: default;
-  }
-
-  #back-button {
-    display: none;
+    min-width: 100vw;
   }
 }
+
+
 
 
 

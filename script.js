@@ -72,6 +72,22 @@ function closeMonth() {
   cal.className = "mobile-overview";
   document.getElementById("back-button").style.display = "none";
 }
+/*********** REFRESH A MEZZANOTTE ***********/
+(function midnightReload() {
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+  setTimeout(() => location.reload(), midnight - now);
+})();
+
+/*********** MODALITÀ NOTTE ***********/
+(function nightMode() {
+  const hour = new Date().getHours();
+  if (hour >= 21 || hour < 7) {
+    document.body.classList.add("night");
+  }
+})();
+
 
 
 

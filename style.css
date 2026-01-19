@@ -1,7 +1,4 @@
-/************* BASE *************/
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -10,56 +7,54 @@ body {
   color: #111;
 }
 
-/************* CONTENITORE *************/
 #calendar {
   display: grid;
   grid-template-columns: 15% 70% 15%;
   height: 100vh;
-  background: #eaeaea;
 }
 
-/************* MESI LATERALI *************/
+/******** MESI LATERALI ********/
 .side-month {
-  background: #f2f2f2;
-  padding: 10px;
-  font-size: 13px;
+  background: #f1f1f1;
+  padding: 5px;
 }
 
 .side-month .month-header {
-  font-weight: bold;
   text-align: center;
-  margin-bottom: 6px;
-  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 16px;   
 }
 
 .side-month .day {
   display: flex;
-  gap: 6px;
-  padding: 3px 0;
+  align-items: center;
+  gap: 18px; /* DISTANZA giorno dal numero */
+  padding: 2px 0;
   border-bottom: 1px solid #ddd;
 }
 
 .side-month .day-number {
-  width: 20px;
+  width: 26px;
   text-align: right;
   font-weight: bold;
+  font-size: 25px;
 }
 
 .side-month .day-name {
-  width: 24px;
+  width: 10px;
 }
 
-/************* MESE CENTRALE *************/
+/******** MESE CENTRALE ********/
 .main-month {
-  background: #ffffff;
+  background: #fff;
   border-left: 4px solid #c40000;
   border-right: 4px solid #c40000;
   display: flex;
   flex-direction: column;
 }
 
-/************* HEADER *************/
-.main-month .month-header {
+.month-header {
   text-align: center;
   font-size: 48px;
   font-weight: bold;
@@ -68,56 +63,51 @@ body {
   border-bottom: 2px solid #c40000;
 }
 
-/************* GIORNI *************/
 .days {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 10px 20px;
-  gap: 10px;
+  gap: 20px;
 }
 
-.day {
+.month-half .day {
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid #ddd;
+  gap: 12px;
   padding: 6px 0;
-  min-height: 44px;
+  border-bottom: 1px solid #ddd;
 }
 
 .day-number {
-  font-size: 34px;
+  font-size: 36px;
   font-weight: bold;
-  width: 46px;
+  width: 50px;
   text-align: right;
 }
 
 .day-name {
   font-weight: bold;
-  width: 30px;
-}
-
-/************* STATI *************/
-.sunday {
-  color: #c40000;
-}
-
-.today {
-  background: rgba(196,0,0,0.12);
-  border-left: 6px solid #c40000;
-  padding-left: 6px;
+  width: 42px;
 }
 
 .birthday {
-  font-size: 16px;
+  font-size: 30px;
   font-style: italic;
-  color: #444;
 }
 
-/************* NOTTE *************/
+/******** STATI ********/
+.sunday { color: #c40000; }
+
+.today {
+  background: rgba(196,0,0,0.2);
+  border-left: 8px solid #c40000;
+  padding-left: 8px;
+}
+
+/******** NOTTE ********/
 body.night {
   background: #111;
-  color: #e0e0e0;
+  color: #eee;
 }
 
 body.night .main-month {
@@ -138,24 +128,16 @@ body.night .day {
   border-color: #333;
 }
 
-/************* MOBILE *************/
+/******** MOBILE ********/
 @media (max-width: 900px) {
-
   #calendar {
     display: flex;
-    flex-direction: row;
     overflow-x: auto;
   }
-
-  .side-month,
-  .main-month {
+  .side-month, .main-month {
     min-width: 100vw;
   }
 }
-
-
-
-
 
 
 

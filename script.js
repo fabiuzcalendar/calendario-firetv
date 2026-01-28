@@ -9,6 +9,42 @@ const monthNames = [
 const dayNamesFull = ["DOM","LUN","MAR","MER","GIO","VEN","SAB"];
 const dayNamesShort = ["D","L","M","M","G","V","S"];
 
+/******** FESTIVITÀ ITALIANE ********/
+
+/* feste fisse (valgono ogni anno) */
+const fixedHolidays = new Set([
+  "01-01", // Capodanno
+  "01-06", // Epifania
+  "04-25", // Liberazione
+  "05-01", // Lavoro
+  "06-02", // Repubblica
+  "08-15", // Ferragosto
+  "11-01", // Ognissanti
+  "12-08", // Immacolata
+  "12-25", // Natale
+  "12-26"  // Santo Stefano
+]);
+
+/* feste mobili per anno */
+const variableHolidays = new Set([
+  // 2024
+  "2024-03-31", // Pasqua
+  "2024-04-01", // Lunedì dell'Angelo
+
+  // 2025
+  "2025-04-20",
+  "2025-04-21",
+
+  // 2026
+  "2026-04-05",
+  "2026-04-06",
+
+  // 2027
+  "2027-03-28",
+  "2027-03-29"
+]);
+
+/******** COMPLEANNI ********/
 const birthdays = {
   "02-08": "Compleanno Katiuscia",
   "06-24": "Compleanno Sonia",
@@ -19,6 +55,7 @@ const birthdays = {
   "01-29": "Compleanno Papà"
 };
 
+/******** RENDER ********/
 function renderAll() {
   const y = currentDate.getFullYear();
   const m = currentDate.getMonth();
@@ -57,10 +94,20 @@ function renderCalendar(containerId, titleId, y, m, showBirthdays, isMain) {
 
     const div = document.createElement("div");
     div.className = "day";
-    if (iso === todayIso && isMain) div.classList.add("today");
-    if (date.getDay() === 0) div.classList.add("sunday");
 
-    const name = isMain ? dayNamesFull[date.getDay()] : dayNamesShort[date.getDay()];
+    if (iso === todayIso && isMain) div.classList.add("today");
+
+    if (
+      date.getDay() === 0 ||               // domenica
+      fixedHolidays.has(md) ||             // feste fisse
+      variableHolidays.has(iso)            // feste mobili
+    ) {
+      div.classList.add("sunday");
+    }
+
+    const name = isMain
+      ? dayNamesFull[date.getDay()]
+      : dayNamesShort[date.getDay()];
 
     div.innerHTML = `
       <div class="day-number">${d}</div>
@@ -98,7 +145,6 @@ renderAll();
   const h = new Date().getHours();
   if (h >= 21 || h < 7) document.body.classList.add("night");
 })();
-
 
 
 

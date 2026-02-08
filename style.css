@@ -215,4 +215,9 @@ body {
   padding: 8px 14px;
   gap: 14px;
 }
+/* Nasconde il debug overlay (anche se resta in index.html) */
+#debug-orientation{
+  display: none !important;
+}
+
 

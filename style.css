@@ -178,19 +178,20 @@ body {
   transform-origin: center center;
 }
 
-/* stato normale */
+/* stato normale (PATCH: include scale via CSS var) */
 #calendar-app.normal {
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(var(--kiosk-scale, 1));
   width: 100vw;
   height: 100vh;
 }
 
-/* stato ruotato (kiosk verticale simulato) */
+/* stato ruotato (PATCH: include scale via CSS var) */
 #calendar-app.rotated {
-  transform: translate(-50%, -50%) rotate(-90deg);
+  transform: translate(-50%, -50%) rotate(-90deg) scale(var(--kiosk-scale, 1));
   width: 100vh;
   height: 100vw;
 }
+
 /* ===== FULLSCREEN FIX quando ruotato ===== */
 #calendar-app.rotated {
   display: flex;
@@ -215,9 +216,8 @@ body {
   padding: 8px 14px;
   gap: 14px;
 }
+
 /* Nasconde il debug overlay (anche se resta in index.html) */
 #debug-orientation{
   display: none !important;
 }
-
-

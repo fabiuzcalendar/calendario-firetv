@@ -152,58 +152,46 @@ renderAll();
   if (dbg) dbg.style.display = "none";
 })();
 
-/******** KIOSK ROTATION FIX + FULLSCREEN SCALE (Raspberry-safe) ********/
-(function kioskRotateAndFit(){
+/******** KIOSK ROTATION + FILL (Raspberry-safe) ********/
+(function kioskRotateAndFill(){
   const app = document.getElementById("calendar-app");
   if (!app) return;
 
-  // Applica classi normal/rotated in base a dimensioni viewport
-  function applyMode(){
+  function setMode(){
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    // Nel tuo Raspberry: spesso risulta "portrait" anche su schermo landscape,
-    // quindi qui ruotiamo quando h>w (come abbiamo misurato).
+    // Sul tuo Pi: h>w anche su schermo fisico landscape -> ruotiamo
     if (h > w) {
-      app.classList.remove("normal");
       app.classList.add("rotated");
+      app.classList.remove("normal");
     } else {
-      app.classList.remove("rotated");
       app.classList.add("normal");
+      app.classList.remove("rotated");
     }
   }
 
-  // Scala per far occupare più schermo possibile senza tagli
-  function applyScale(){
-    // reset prima di misurare
-    app.style.transformOrigin = "center center";
-    app.style.scale = "1";
+  function setFillScale(){
+    // reset scala (variabile CSS)
+    app.style.setProperty("--kiosk-scale", "1");
 
-    // se non siamo ruotati, nessuna scala necessaria
-    if (!app.classList.contains("rotated")) return;
-
-    // misura reale del contenuto
     const rect = app.getBoundingClientRect();
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
-    // fit "senza tagli"
-    const s = Math.min(vw / rect.width, vh / rect.height);
+    // COVER: riempie tutto lo schermo (niente nero). Può tagliare un filo ai bordi.
+    const s = Math.max(vw / rect.width, vh / rect.height);
 
-    // evita micro-oscillazioni e valori strani
-    const safe = Math.max(0.1, Math.min(s, 2));
-    app.style.scale = String(safe);
+    const safe = Math.max(0.1, Math.min(s, 3));
+    app.style.setProperty("--kiosk-scale", String(safe));
   }
 
   function applyAll(){
-    applyMode();
-    // aspetta un attimo che il layout si stabilizzi dopo cambio classe
-    setTimeout(applyScale, 50);
+    setMode();
+    // dopo cambio classe, ricalcola scala
+    setTimeout(setFillScale, 80);
   }
 
   window.addEventListener("resize", applyAll);
   applyAll();
 })();
-
-
-

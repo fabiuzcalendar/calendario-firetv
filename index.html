@@ -43,9 +43,36 @@
 
     </div>
   </div>
+<div id="debug-orientation"></div>
+<script>
+(function(){
+  const el = document.getElementById("debug-orientation");
+  el.style.position = "fixed";
+  el.style.right = "8px";
+  el.style.bottom = "8px";
+  el.style.zIndex = "999999";
+  el.style.background = "rgba(0,0,0,0.65)";
+  el.style.color = "#fff";
+  el.style.font = "14px Arial, sans-serif";
+  el.style.padding = "8px 10px";
+  el.style.borderRadius = "8px";
+
+  function upd(){
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const m1 = window.matchMedia("(orientation: landscape)").matches;
+    const m2 = window.matchMedia("(min-aspect-ratio: 1/1)").matches;
+    el.textContent = `w=${w} h=${h} | orientation:landscape=${m1} | min-aspect-ratio 1/1=${m2}`;
+  }
+  window.addEventListener("resize", upd);
+  window.addEventListener("orientationchange", upd);
+  upd();
+})();
+</script>
 
 </body>
 </html>
+
 
 
 

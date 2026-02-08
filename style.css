@@ -191,3 +191,28 @@ body {
   width: 100vh;
   height: 100vw;
 }
+/* ===== FULLSCREEN FIX quando ruotato ===== */
+#calendar-app.rotated {
+  display: flex;
+  flex-direction: column;
+}
+
+/* i controlli restano in alto, ma misurati in modo pulito */
+#calendar-app.rotated .controls {
+  flex: 0 0 auto;
+  padding: 8px;
+}
+
+/* il calendario prende TUTTO lo spazio restante */
+#calendar-app.rotated #calendar {
+  flex: 1 1 auto;
+  height: auto !important;   /* override del calc(100vh - 60px) */
+  min-height: 0;             /* evita overflow strani in flex */
+}
+
+/* opzionale: riduci un filo gap/padding per massimizzare schermo */
+#calendar-app.rotated .days {
+  padding: 8px 14px;
+  gap: 14px;
+}
+

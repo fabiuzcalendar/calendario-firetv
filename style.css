@@ -151,9 +151,8 @@ body.night .side-month {
 }
 
 /* ================================
-   KIOSK ROTATE + FULLSCREEN (AGGIUNTO)
-   - Se schermo è landscape: ruota e riempi
-   - Se schermo è portrait: normale
+   KIOSK ROTATE + FULLSCREEN
+   controllato da JS (NO media query)
    ================================ */
 
 html, body {
@@ -161,20 +160,17 @@ html, body {
   height: 100%;
 }
 
-/* In kiosk evitiamo scroll della pagina (il layout deve stare tutto a schermo) */
 body {
   overflow: hidden;
 }
 
-/* contenitore a schermo intero */
 #kiosk-root{
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: inherit; /* mantiene #f4f4f4 o #111 in night mode */
+  background: inherit;
 }
 
-/* tutto il calendario vive qui dentro e viene ruotato/centrato */
 #calendar-app{
   position: absolute;
   top: 50%;
@@ -182,20 +178,16 @@ body {
   transform-origin: center center;
 }
 
-/* Schermo verticale: nessuna rotazione */
-@media (orientation: portrait) {
-  #calendar-app{
-    transform: translate(-50%, -50%);
-    width: 100vw;
-    height: 100vh;
-  }
+/* stato normale */
+#calendar-app.normal {
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
 }
 
-/* Schermo orizzontale: ruota per simulare un “display verticale” e riempi */
-@media (orientation: landscape) {
-  #calendar-app{
-    transform: translate(-50%, -50%) rotate(90deg);
-    width: 100vh;   /* assi scambiati dopo rotazione */
-    height: 100vw;
-  }
+/* stato ruotato (kiosk verticale simulato) */
+#calendar-app.rotated {
+  transform: translate(-50%, -50%) rotate(-90deg);
+  width: 100vh;
+  height: 100vw;
 }

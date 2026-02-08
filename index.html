@@ -9,39 +9,43 @@
 
 <body>
 
-<!-- CONTROLLI -->
-<div class="controls">
-  <button onclick="changeMonth(-1)">⬅ Indietro</button>
-  <button onclick="resetToToday()">Oggi</button>
-  <button onclick="changeMonth(1)">Avanti ➡</button>
-</div>
+  <!-- WRAPPER KIOSK (aggiunto) -->
+  <div id="kiosk-root">
+    <div id="calendar-app">
 
-<div id="calendar">
+      <!-- CONTROLLI -->
+      <div class="controls">
+        <button onclick="changeMonth(-1)">⬅ Indietro</button>
+        <button onclick="resetToToday()">Oggi</button>
+        <button onclick="changeMonth(1)">Avanti ➡</button>
+      </div>
 
-  <div class="side-month">
-    <div class="month-header" id="prev-month"></div>
-    <div class="days" id="prev-days"></div>
+      <div id="calendar">
+
+        <div class="side-month">
+          <div class="month-header" id="prev-month"></div>
+          <div class="days" id="prev-days"></div>
+        </div>
+
+        <div class="main-month">
+          <div class="month-header" id="current-month"></div>
+          <div class="days" id="days"></div>
+        </div>
+
+        <div class="side-month">
+          <div class="month-header" id="next-month"></div>
+          <div class="days" id="next-days"></div>
+        </div>
+
+      </div>
+
+      <script src="script.js"></script>
+
+    </div>
   </div>
 
-  <div class="main-month">
-    <div class="month-header" id="current-month"></div>
-    <div class="days" id="days"></div>
-  </div>
-
-  <div class="side-month">
-    <div class="month-header" id="next-month"></div>
-    <div class="days" id="next-days"></div>
-  </div>
-
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
-
-
-
-
 
 
 

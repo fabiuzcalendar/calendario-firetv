@@ -145,16 +145,25 @@ renderAll();
   const h = new Date().getHours();
   if (h >= 21 || h < 7) document.body.classList.add("night");
 })();
-/******** KIOSK ROTATION FIX (Raspberry-safe) ********/
-(function kioskRotateFix(){
+
+/******** NASCONDI DEBUG OVERLAY (se esiste in HTML) ********/
+(function hideDebugOverlay(){
+  const dbg = document.getElementById("debug-orientation");
+  if (dbg) dbg.style.display = "none";
+})();
+
+/******** KIOSK ROTATION FIX + FULLSCREEN SCALE (Raspberry-safe) ********/
+(function kioskRotateAndFit(){
   const app = document.getElementById("calendar-app");
   if (!app) return;
 
-  function apply(){
+  // Applica classi normal/rotated in base a dimensioni viewport
+  function applyMode(){
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    // Se Chromium dice "portrait" ma siamo su display fisico orizzontale
+    // Nel tuo Raspberry: spesso risulta "portrait" anche su schermo landscape,
+    // quindi qui ruotiamo quando h>w (come abbiamo misurato).
     if (h > w) {
       app.classList.remove("normal");
       app.classList.add("rotated");
@@ -164,10 +173,37 @@ renderAll();
     }
   }
 
-  window.addEventListener("resize", apply);
-  apply();
-})();
+  // Scala per far occupare più schermo possibile senza tagli
+  function applyScale(){
+    // reset prima di misurare
+    app.style.transformOrigin = "center center";
+    app.style.scale = "1";
 
+    // se non siamo ruotati, nessuna scala necessaria
+    if (!app.classList.contains("rotated")) return;
+
+    // misura reale del contenuto
+    const rect = app.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    // fit "senza tagli"
+    const s = Math.min(vw / rect.width, vh / rect.height);
+
+    // evita micro-oscillazioni e valori strani
+    const safe = Math.max(0.1, Math.min(s, 2));
+    app.style.scale = String(safe);
+  }
+
+  function applyAll(){
+    applyMode();
+    // aspetta un attimo che il layout si stabilizzi dopo cambio classe
+    setTimeout(applyScale, 50);
+  }
+
+  window.addEventListener("resize", applyAll);
+  applyAll();
+})();
 
 
 

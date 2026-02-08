@@ -145,6 +145,29 @@ renderAll();
   const h = new Date().getHours();
   if (h >= 21 || h < 7) document.body.classList.add("night");
 })();
+/******** KIOSK ROTATION FIX (Raspberry-safe) ********/
+(function kioskRotateFix(){
+  const app = document.getElementById("calendar-app");
+  if (!app) return;
+
+  function apply(){
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    // Se Chromium dice "portrait" ma siamo su display fisico orizzontale
+    if (h > w) {
+      app.classList.remove("normal");
+      app.classList.add("rotated");
+    } else {
+      app.classList.remove("rotated");
+      app.classList.add("normal");
+    }
+  }
+
+  window.addEventListener("resize", apply);
+  apply();
+})();
+
 
 
 

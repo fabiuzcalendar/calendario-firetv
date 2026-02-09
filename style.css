@@ -221,3 +221,35 @@ body {
 #debug-orientation{
   display: none !important;
 }
+/* ================================
+   FIX DEFINITIVO: il calendario DEVE riempire
+   ================================ */
+
+/* In modalità kiosk ruotata, il calendario usa tutta la larghezza */
+#calendar-app.rotated #calendar {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Abbandoniamo le % che lasciano buchi */
+#calendar-app.rotated #calendar {
+  grid-template-columns: 1fr 5fr 1fr;
+}
+
+/* Evitiamo che padding/border riducano la larghezza reale */
+#calendar-app.rotated .side-month,
+#calendar-app.rotated .main-month {
+  box-sizing: border-box;
+}
+
+/* (opzionale ma consigliato) riduciamo padding laterali */
+#calendar-app.rotated .side-month {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+#calendar-app.rotated .main-month {
+  padding-left: 0;
+  padding-right: 0;
+}
+

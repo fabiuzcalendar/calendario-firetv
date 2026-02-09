@@ -11,38 +11,73 @@ const dayNamesShort = ["D","L","M","M","G","V","S"];
 
 /******** FESTIVITÀ ITALIANE ********/
 
-/* feste fisse (valgono ogni anno) */
-const fixedHolidays = new Set([
-  "01-01", // Capodanno
-  "01-06", // Epifania
-  "04-25", // Liberazione
-  "05-01", // Lavoro
-  "06-02", // Repubblica
-  "08-15", // Ferragosto
-  "11-01", // Ognissanti
-  "12-08", // Immacolata
-  "12-25", // Natale
-  "12-26"  // Santo Stefano
-]);
+/* feste fisse (valgono ogni anno) -> mappa MD -> nome */
+const fixedHolidays = {
+  "01-01": "Capodanno",
+  "01-06": "Epifania",
+  "04-25": "Festa della Liberazione",
+  "05-01": "Festa dei Lavoratori",
+  "06-02": "Festa della Repubblica",
+  "08-15": "Ferragosto",
+  "11-01": "Ognissanti",
+  "12-08": "Immacolata Concezione",
+  "12-25": "Natale",
+  "12-26": "Santo Stefano"
+};
 
-/* feste mobili per anno */
-const variableHolidays = new Set([
-  // 2024
-  "2024-03-31", // Pasqua
-  "2024-04-01", // Lunedì dell'Angelo
+/* Calcolo Pasqua (algoritmo di Meeus/Jones/Butcher) */
+function easterSunday(year) {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31); // 3=Marzo, 4=Aprile
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
 
-  // 2025
-  "2025-04-20",
-  "2025-04-21",
+  // ritorna Date in ora locale (mezzogiorno per evitare edge timezone)
+  return new Date(year, month - 1, day, 12, 0, 0, 0);
+}
 
-  // 2026
-  "2026-04-05",
-  "2026-04-06",
+function pad2(n) { return String(n).padStart(2, "0"); }
 
-  // 2027
-  "2027-03-28",
-  "2027-03-29"
-]);
+function toISO(d) {
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+function toMD(d) {
+  return `${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+
+/* Feste mobili (per anno) -> restituisce mappa ISO -> nome */
+function variableHolidaysForYear(year) {
+  const easter = easterSunday(year);
+  const easterMonday = new Date(easter);
+  easterMonday.setDate(easterMonday.getDate() + 1);
+
+  return {
+    [toISO(easter)]: "Pasqua",
+    [toISO(easterMonday)]: "Lunedì dell’Angelo"
+  };
+}
+
+/* Ritorna nome festa se esiste */
+function getHolidayName(iso, md, year) {
+  // fisse
+  if (fixedHolidays[md]) return fixedHolidays[md];
+
+  // mobili (Pasqua/Pasquetta)
+  const vars = variableHolidaysForYear(year);
+  if (vars[iso]) return vars[iso];
+
+  return "";
+}
 
 /******** COMPLEANNI ********/
 const birthdays = {
@@ -88,19 +123,20 @@ function renderCalendar(containerId, titleId, y, m, showBirthdays, isMain) {
   }
 
   for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(y, m, d);
-    const iso = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-    const md  = `${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const date = new Date(y, m, d, 12, 0, 0, 0);
+    const iso = `${y}-${pad2(m+1)}-${pad2(d)}`;
+    const md  = `${pad2(m+1)}-${pad2(d)}`;
 
     const div = document.createElement("div");
     div.className = "day";
 
     if (iso === todayIso && isMain) div.classList.add("today");
 
+    const holidayName = getHolidayName(iso, md, y);
+
     if (
       date.getDay() === 0 ||               // domenica
-      fixedHolidays.has(md) ||             // feste fisse
-      variableHolidays.has(iso)            // feste mobili
+      !!holidayName                        // qualunque festa: rosso come domenica
     ) {
       div.classList.add("sunday");
     }
@@ -109,10 +145,20 @@ function renderCalendar(containerId, titleId, y, m, showBirthdays, isMain) {
       ? dayNamesFull[date.getDay()]
       : dayNamesShort[date.getDay()];
 
+    // Mostriamo testo festa + compleanno SOLO nel mese centrale (isMain)
+    const holidayHTML = (isMain && holidayName)
+      ? `<div class="holiday">${holidayName}</div>`
+      : "";
+
+    const birthdayHTML = (isMain && showBirthdays && birthdays[md])
+      ? `<div class="birthday">${birthdays[md]}</div>`
+      : "";
+
     div.innerHTML = `
       <div class="day-number">${d}</div>
       <div class="day-name">${name}</div>
-      ${showBirthdays && birthdays[md] ? `<div class="birthday">${birthdays[md]}</div>` : ""}
+      ${holidayHTML}
+      ${birthdayHTML}
     `;
 
     if (isMain) (d <= 15 ? leftCol : rightCol).appendChild(div);
@@ -144,12 +190,6 @@ renderAll();
 (function nightMode(){
   const h = new Date().getHours();
   if (h >= 21 || h < 7) document.body.classList.add("night");
-})();
-
-/******** NASCONDI DEBUG OVERLAY (se esiste in HTML) ********/
-(function hideDebugOverlay(){
-  const dbg = document.getElementById("debug-orientation");
-  if (dbg) dbg.style.display = "none";
 })();
 
 /******** KIOSK ROTATION + FILL (Raspberry-safe) ********/
@@ -188,10 +228,10 @@ renderAll();
 
   function applyAll(){
     setMode();
-    // dopo cambio classe, ricalcola scala
     setTimeout(setFillScale, 80);
   }
 
   window.addEventListener("resize", applyAll);
   applyAll();
 })();
+

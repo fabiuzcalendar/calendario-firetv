@@ -105,6 +105,13 @@ body {
   width: 44px;
 }
 
+/* Testi evento */
+.holiday {
+  font-size: 15px;
+  font-style: italic;
+  opacity: 0.9;
+}
+
 .birthday {
   font-size: 15px;
   font-style: italic;
@@ -158,9 +165,6 @@ body.night .side-month {
 html, body {
   width: 100%;
   height: 100%;
-}
-
-body {
   overflow: hidden;
 }
 
@@ -178,14 +182,14 @@ body {
   transform-origin: center center;
 }
 
-/* stato normale (PATCH: include scale via CSS var) */
+/* stato normale (include scale via CSS var) */
 #calendar-app.normal {
   transform: translate(-50%, -50%) scale(var(--kiosk-scale, 1));
   width: 100vw;
   height: 100vh;
 }
 
-/* stato ruotato (PATCH: include scale via CSS var) */
+/* stato ruotato (ruota SOLO il wrapper, NON il body) */
 #calendar-app.rotated {
   transform: translate(-50%, -50%) rotate(-90deg) scale(var(--kiosk-scale, 1));
   width: 100vh;
@@ -198,7 +202,7 @@ body {
   flex-direction: column;
 }
 
-/* i controlli restano in alto, ma misurati in modo pulito */
+/* i controlli restano in alto */
 #calendar-app.rotated .controls {
   flex: 0 0 auto;
   padding: 8px;
@@ -208,32 +212,10 @@ body {
 #calendar-app.rotated #calendar {
   flex: 1 1 auto;
   height: auto !important;   /* override del calc(100vh - 60px) */
-  min-height: 0;             /* evita overflow strani in flex */
-}
-
-/* opzionale: riduci un filo gap/padding per massimizzare schermo */
-#calendar-app.rotated .days {
-  padding: 8px 14px;
-  gap: 14px;
-}
-
-/* Nasconde il debug overlay (anche se resta in index.html) */
-#debug-orientation{
-  display: none !important;
-}
-/* ================================
-   FIX DEFINITIVO: il calendario DEVE riempire
-   ================================ */
-
-/* In modalità kiosk ruotata, il calendario usa tutta la larghezza */
-#calendar-app.rotated #calendar {
+  min-height: 0;
   width: 100%;
   max-width: 100%;
-}
-
-/* Abbandoniamo le % che lasciano buchi */
-#calendar-app.rotated #calendar {
-  grid-template-columns: 1fr 5fr 1fr;
+  grid-template-columns: 1fr 5fr 1fr; /* meglio delle % */
 }
 
 /* Evitiamo che padding/border riducano la larghezza reale */
@@ -242,7 +224,7 @@ body {
   box-sizing: border-box;
 }
 
-/* (opzionale ma consigliato) riduciamo padding laterali */
+/* riduciamo padding laterali per massimizzare schermo */
 #calendar-app.rotated .side-month {
   padding-left: 6px;
   padding-right: 6px;
@@ -252,25 +234,14 @@ body {
   padding-left: 0;
   padding-right: 0;
 }
-/* ================================
-   ROTAZIONE FINALE KIOSK (90°)
-   ================================ */
 
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+/* opzionale: riduci un filo gap/padding */
+#calendar-app.rotated .days {
+  padding: 8px 14px;
+  gap: 14px;
 }
 
-body {
-  transform: rotate(-90deg);
-  transform-origin: center center;
-  width: 100vh;
-  height: 100vw;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
+/* Nasconde eventuali overlay debug */
+#debug-orientation, #kiosk-diag{
+  display: none !important;
 }
-
-

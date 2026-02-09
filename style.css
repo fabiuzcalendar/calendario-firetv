@@ -1,9 +1,8 @@
 * { box-sizing: border-box; }
 
 :root{
-  /* scala tipografica "da muro" */
-  --title-size: 52px;
-  --daynum-size: 42px;
+  --title-size: 56px;
+  --daynum-size: 46px;
   --dayname-size: 16px;
   --note-size: 15px;
 
@@ -46,6 +45,7 @@ body{
   display: grid;
   grid-template-columns: 15% 70% 15%;
   height: calc(100vh - 60px);
+  align-items: stretch;
 }
 
 /******** MESI LATERALI ********/
@@ -100,7 +100,7 @@ body{
 
 .days{
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 1-15 / 16-fine come ora */
+  grid-template-columns: 1fr 1fr; /* 1-15 / 16-fine */
   padding: 12px 28px;
   gap: 24px;
 }
@@ -116,7 +116,7 @@ body{
 .day-number{
   font-size: var(--daynum-size);
   font-weight: bold;
-  width: 56px;
+  width: 62px;
   text-align: right;
 }
 
@@ -192,7 +192,6 @@ body.night .side-month .day{
   background: inherit;
 }
 
-/* in kiosk, il wrapper occupa SEMPRE tutto e viene solo ruotato */
 #calendar-app{
   position: absolute;
   top: 50%;
@@ -207,37 +206,82 @@ body.night .side-month .day{
   height: 100vh;
 }
 
-/* stato ruotato: NIENTE scale variabile (fix vuoto a destra) */
+/* stato ruotato */
 #calendar-app.rotated{
   transform: translate(-50%, -50%) rotate(-90deg);
   width: 100vh;
   height: 100vw;
-}
 
-/* layout interno in ruotato */
-#calendar-app.rotated{
   display: flex;
   flex-direction: column;
 }
 
+/* controls sopra */
 #calendar-app.rotated .controls{
   flex: 0 0 auto;
   padding: 8px;
 }
 
-/* il calendario prende tutto lo spazio disponibile */
+/* calendario deve riempire tutta l'altezza restante */
 #calendar-app.rotated #calendar{
   flex: 1 1 auto;
-  height: auto !important;
+  height: 100% !important;
   min-height: 0;
   width: 100%;
   max-width: 100%;
 
-  /* colonne strette + centrale enorme */
+  /* centrale enorme, laterali stretti */
   grid-template-columns: 7% 86% 7%;
+  align-items: stretch;
 }
 
-/* laterali verticali compatti */
+/* ====== FIX CHIAVE: tutte le 3 colonne devono allungarsi fino in fondo ====== */
+#calendar-app.rotated .side-month,
+#calendar-app.rotated .main-month{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* header fisso, lista giorni prende tutto lo spazio */
+#calendar-app.rotated .side-month .month-header,
+#calendar-app.rotated .main-month .month-header{
+  flex: 0 0 auto;
+}
+
+#calendar-app.rotated .side-month .days,
+#calendar-app.rotated .main-month .days{
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* ====== FIX CHIAVE: il mese centrale deve "stirare" le righe e riempire ====== */
+#calendar-app.rotated .main-month .days{
+  padding: 12px 34px;
+  gap: 26px;
+}
+
+/* rendiamo i due contenitori (1-15) e (16-fine) griglie con righe elastiche */
+#calendar-app.rotated .main-month .month-half{
+  display: grid;
+  grid-auto-rows: 1fr;   /* ogni giorno si prende una quota di altezza */
+  align-content: stretch;
+}
+
+/* ogni riga occupa tutto e la linea di separazione resta "lunga" */
+#calendar-app.rotated .main-month .month-half .day{
+  padding: 0;                     /* lasciamo che sia l’altezza a fare da spaziatura */
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+/* in tema chiaro, riga più visibile */
+body:not(.night) #calendar-app.rotated .main-month .month-half .day{
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+/* laterali: verticali compatti ma pieni fino in fondo */
 #calendar-app.rotated .side-month{
   padding: 6px 4px;
 }
@@ -250,14 +294,15 @@ body.night .side-month .day{
 #calendar-app.rotated .side-month .days{
   display: grid;
   grid-template-columns: 1fr;
-  gap: 4px;
+  grid-auto-rows: 1fr;  /* anche loro “stirano” e riempiono lo spazio */
+  gap: 2px;
   padding: 4px 0;
 }
 
 #calendar-app.rotated .side-month .day{
   gap: 6px;
-  padding: 2px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
+  padding: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
 }
 
 body.night #calendar-app.rotated .side-month .day{
@@ -274,15 +319,10 @@ body.night #calendar-app.rotated .side-month .day{
   width: 12px;
 }
 
-/* mese centrale ancora più "muro" in ruotato */
+/* mese centrale più leggibile */
 #calendar-app.rotated .month-header{
   font-size: 56px;
   padding: 10px 0;
-}
-
-#calendar-app.rotated .days{
-  padding: 12px 34px;
-  gap: 26px;
 }
 
 #calendar-app.rotated .day-number{

@@ -3,13 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendario di Fabio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Viewport robusto per kiosk + mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Evita caching aggressivo lato browser (utile durante tuning) -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- WRAPPER KIOSK (aggiunto) -->
+  <!-- WRAPPER KIOSK -->
   <div id="kiosk-root">
     <div id="calendar-app">
 
@@ -39,44 +47,12 @@
 
       </div>
 
-      <script src="script.js"></script>
-
     </div>
   </div>
-<div id="debug-orientation"></div>
-<script>
-(function(){
-  const el = document.getElementById("debug-orientation");
-  el.style.position = "fixed";
-  el.style.right = "8px";
-  el.style.bottom = "8px";
-  el.style.zIndex = "999999";
-  el.style.background = "rgba(0,0,0,0.65)";
-  el.style.color = "#fff";
-  el.style.font = "14px Arial, sans-serif";
-  el.style.padding = "8px 10px";
-  el.style.borderRadius = "8px";
 
-  function upd(){
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const m1 = window.matchMedia("(orientation: landscape)").matches;
-    const m2 = window.matchMedia("(min-aspect-ratio: 1/1)").matches;
-    el.textContent = `w=${w} h=${h} | orientation:landscape=${m1} | min-aspect-ratio 1/1=${m2}`;
-  }
-  window.addEventListener("resize", upd);
-  window.addEventListener("orientationchange", upd);
-  upd();
-})();
-</script>
+  <!-- Script (defer = carica dopo il parsing HTML) -->
+  <script src="script.js" defer></script>
 
 </body>
 </html>
-
-
-
-
-
-
-
 

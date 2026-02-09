@@ -191,7 +191,7 @@ html, body {
 
 /* stato ruotato (ruota SOLO il wrapper, NON il body) */
 #calendar-app.rotated {
-  transform: translate(-50%, -50%) rotate(90deg) scale(var(--kiosk-scale, 1));
+  transform: translate(-50%, -50%) rotate(-90deg) scale(var(--kiosk-scale, 1));
   width: 100vh;
   height: 100vw;
 }
@@ -245,4 +245,5 @@ html, body {
 #debug-orientation, #kiosk-diag{
   display: none !important;
 }
+
 

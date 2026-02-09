@@ -198,18 +198,19 @@ renderAll();
   if (!app) return;
 
   function setMode(){
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
 
-    // Sul tuo Pi: h>w anche su schermo fisico landscape -> ruotiamo
-    if (h > w) {
-      app.classList.add("rotated");
-      app.classList.remove("normal");
-    } else {
-      app.classList.add("normal");
-      app.classList.remove("rotated");
-    }
+  // Se siamo su TV landscape (w>h) ruotiamo per avere calendario verticale
+  if (w > h) {
+    app.classList.add("rotated");
+    app.classList.remove("normal");
+  } else {
+    app.classList.add("normal");
+    app.classList.remove("rotated");
   }
+}
+
 
   function setFillScale(){
     // reset scala (variabile CSS)
@@ -234,4 +235,5 @@ renderAll();
   window.addEventListener("resize", applyAll);
   applyAll();
 })();
+
 

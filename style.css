@@ -24,7 +24,7 @@ body {
 /******** CALENDARIO ********/
 #calendar {
   display: grid;
-  grid-template-columns: 15% 70% 15%;
+  grid-template-columns: 10% 80% 10%;
   height: calc(100vh - 60px);
 }
 
@@ -215,7 +215,7 @@ html, body {
   min-height: 0;
   width: 100%;
   max-width: 100%;
-  grid-template-columns: 1fr 5fr 1fr; /* meglio delle % */
+  grid-template-columns: 10% 80% 10%; /* FIX: mantiene 10/80/10 anche in rotated */
 }
 
 /* Evitiamo che padding/border riducano la larghezza reale */
@@ -235,8 +235,8 @@ html, body {
   padding-right: 0;
 }
 
-/* opzionale: riduci un filo gap/padding */
-#calendar-app.rotated .days {
+/* opzionale: riduci un filo gap/padding SOLO per i laterali (FIX) */
+#calendar-app.rotated .side-month .days {
   padding: 8px 14px;
   gap: 14px;
 }
@@ -246,4 +246,41 @@ html, body {
   display: none !important;
 }
 
+/* ====== MESI LATERALI COMPATTI (una sola riga) ====== */
+#calendar-app.rotated .side-month .days {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;      /* NON andare a capo */
+  overflow: hidden;
+  gap: 6px;
+}
 
+/* ogni giorno diventa super compatto */
+#calendar-app.rotated .side-month .day {
+  border-bottom: none;
+  padding: 0;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* numeri più piccoli */
+#calendar-app.rotated .side-month .day-number {
+  font-size: 14px;
+  width: auto;
+}
+
+/* lettere giorno più piccole */
+#calendar-app.rotated .side-month .day-name {
+  font-size: 11px;
+  width: auto;
+}
+
+/* ====== MESE CENTRALE PIÙ AMPIO ====== */
+#calendar-app.rotated .main-month .days {
+  padding: 12px 28px;
+  gap: 24px;
+}
+
+#calendar-app.rotated .main-month .day-number {
+  font-size: 40px;
+}

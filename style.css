@@ -246,14 +246,42 @@ html, body {
   display: none !important;
 }
 
-/* ====== MESI LATERALI COMPATTI (una sola riga) ====== */
-#calendar-app.rotated .side-month .days {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;      /* NON andare a capo */
-  overflow: hidden;
-  gap: 6px;
+/* ===== KIOSK: colonne laterali strette, mese centrale enorme ===== */
+#calendar-app.rotated #calendar {
+  grid-template-columns: 7% 86% 7% !important;   /* più spazio al mese centrale */
 }
+
+/* ===== KIOSK: mesi laterali VERTICALI (verso giusto), compatti ===== */
+#calendar-app.rotated .side-month .days{
+  display: grid !important;
+  grid-template-columns: 1fr !important;  /* una colonna */
+  gap: 4px;
+  padding: 6px 4px;
+}
+
+/* ogni riga laterale molto compatta */
+#calendar-app.rotated .side-month .day{
+  gap: 6px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* numeri e lettere più piccoli */
+#calendar-app.rotated .side-month .day-number{
+  font-size: 14px;
+  width: 22px;
+}
+#calendar-app.rotated .side-month .day-name{
+  font-size: 11px;
+  width: 12px;
+}
+
+/* header laterali più piccolo */
+#calendar-app.rotated .side-month .month-header{
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
 
 /* ogni giorno diventa super compatto */
 #calendar-app.rotated .side-month .day {

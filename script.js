@@ -81,7 +81,7 @@ function getHolidayName(iso, md, year) {
 
 /******** COMPLEANNI ********/
 const birthdays = {
-  "02-08": "Compleanno Katiuscia",
+ // "02-08": "Compleanno Katiuscia", con le // è nascosto
   "06-24": "Compleanno Sonia",
   "07-02": "Compleanno Laura",
   "07-03": "Compleanno Mamma",
@@ -235,5 +235,31 @@ renderAll();
   window.addEventListener("resize", applyAll);
   applyAll();
 })();
+/******** INPUT: TASTIERA (per tasti fisici) ********/
+(function keyboardMonthControl(){
+  let last = 0;
+  const cooldownMs = 180; // evita doppio scatto
+
+  window.addEventListener("keydown", (e) => {
+    // evita repeat quando tieni premuto
+    if (e.repeat) return;
+
+    const now = Date.now();
+    if (now - last < cooldownMs) return;
+    last = now;
+
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      changeMonth(-1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      changeMonth(1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      resetToToday();
+    }
+  }, { passive: false });
+})();
+
 
 

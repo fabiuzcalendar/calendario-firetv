@@ -208,7 +208,7 @@ body.night .side-month .day{
 
 /* stato ruotato */
 #calendar-app.rotated{
-  transform: translate(-50%, -50%) rotate(-90deg);
+  transform: translate(-50%, -50%) rotate(90deg);
   width: 100vh;
   height: 100vw;
 
@@ -334,3 +334,4 @@ body.night #calendar-app.rotated .side-month .day{
 #debug-orientation, #kiosk-diag{
   display: none !important;
 }
+
